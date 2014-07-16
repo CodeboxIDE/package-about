@@ -5,8 +5,11 @@ define(function() {
     commands.register({
         id: "about.show",
         title: "About",
+        shortcuts: [
+            "mod+shift+a"
+        ],
         run: function() {
-            return dialogs.alert("About Codebox", "");
+            return dialogs.alert("About Codebox");
         }
     });
 });
