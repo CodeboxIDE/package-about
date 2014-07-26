@@ -1,6 +1,7 @@
 {
     "name": "about",
-    "version": "1.0.0",
+    "version": "0.0.0",
+    "main": "src/index",
     "description": "About dialog",
     "engines": {
         "codebox": ">=1.0.0"
