@@ -7,12 +7,17 @@ define([
     var File = codebox.require("models/file");
     var rpc = codebox.require("core/rpc");
 
+    // Infos
+    var helpUrl = "http://help.codebox.io/";
+    var feedbackUrl = "https://github.com/CodeboxIDE/codebox/issues";
+
+    // Cached methods
     var about = _.memoize(rpc.execute.bind(rpc, "codebox/about"));
     var releasesNotes = _.memoize(rpc.execute.bind(rpc, "codebox/changes"));
 
     // About dialog
     commands.register({
-        id: "about.show",
+        id: "application.about",
         title: "Application: About",
         run: function() {
             return about()
@@ -24,7 +29,7 @@ define([
 
     // Welcome message
     commands.register({
-        id: "about.welcome",
+        id: "application.welcome",
         title: "Application: Welcome",
         run: function() {
             return commands.run("file.open", {
@@ -35,8 +40,8 @@ define([
 
     // Releases notes
     commands.register({
-        id: "about.releases",
-        title: "Application: Releases Notes",
+        id: "application.releases",
+        title: "Application: Show Releases Notes",
         run: function() {
             return releasesNotes()
             .get("content")
@@ -45,6 +50,27 @@ define([
                     file: File.buffer("Releases Notes.md", content)
                 })
             });
+        }
+    });
+
+    // Open documentation
+    commands.register({
+        id: "application.help",
+        title: "Application: Open Documentation",
+        shortcuts: [
+            "?"
+        ],
+        run: function() {
+            window.open(helpUrl);
+        }
+    });
+
+    // Open feedback
+    commands.register({
+        id: "application.feedback",
+        title: "Application: Send Feedback",
+        run: function() {
+            window.open(feedbackUrl);
         }
     });
 
