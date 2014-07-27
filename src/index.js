@@ -6,13 +6,29 @@ define([
     var dialogs = codebox.require("utils/dialogs");
     var File = codebox.require("models/file");
     var rpc = codebox.require("core/rpc");
+    var storage = codebox.require("hr/storage");
 
     // Infos
     var helpUrl = "http://help.codebox.io/";
     var feedbackUrl = "https://github.com/CodeboxIDE/codebox/issues";
 
     // Cached methods
-    var about = _.memoize(rpc.execute.bind(rpc, "codebox/about"));
+    var about = _.memoize(function() {
+        return rpc.execute("codebox/about")
+        .then(function(pkg) {
+            var currentVersion = pkg.version;
+            var lastVersion = storage.get("codeboxVersion");
+
+            if (lastVersion == null) {
+                commands.run("application.welcome");
+            } else if (currentVersion != lastVersion) {
+                commands.run("application.changes");
+            }
+            storage.set("codeboxVersion", currentVersion);
+
+            return pkg;
+        });
+    });
     var releasesNotes = _.memoize(rpc.execute.bind(rpc, "codebox/changes"));
 
     // About dialog
@@ -40,7 +56,7 @@ define([
 
     // Releases notes
     commands.register({
-        id: "application.releases",
+        id: "application.changes",
         title: "Application: Show Releases Notes",
         run: function() {
             return releasesNotes()
@@ -74,6 +90,9 @@ define([
         }
     });
 
-    // Put in cache version
-    about();
+    // Open changes if version changes
+    codebox.app.once("ready", function() {
+        console.log("run about");
+        about();
+    });
 });
