@@ -92,7 +92,6 @@ define([
 
     // Open changes if version changes
     codebox.app.once("ready", function() {
-        console.log("run about");
         about();
     });
 });
