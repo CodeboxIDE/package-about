@@ -13,7 +13,7 @@
         "transform": [
             [
                 "stringify", {
-                    "extensions": [".md"]
+                    "extensions": [".md", ".html"]
                 }
             ]
         ]

@@ -1,4 +1,5 @@
 var welcomeMessage = require("./welcome.md");
+var aboutMessage = require("./about.html");
 
 var _ = codebox.require("hr.utils");
 var storage = codebox.require("hr.storage");
@@ -38,7 +39,7 @@ commands.register({
     run: function() {
         return about()
         .then(function(pkg) {
-            return dialogs.alert("Codebox version: "+pkg.version);
+            return dialogs.alert(_.template(aboutMessage)(pkg), { isHtml: true });
         });
     }
 });
