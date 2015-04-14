@@ -9,6 +9,9 @@
     "dependencies": {
         "stringify": "3.1.0"
     },
+    "packageDependencies": {
+        "statusbar": "CodeboxIDE/package-statusbar"
+    },
     "browserify": {
         "transform": [
             [
