@@ -4,7 +4,7 @@
     "browser": "./src/index.js",
     "description": "About dialog",
     "engines": {
-        "codebox": ">0.9.x"
+        "codebox": ">=1.0.0-alpha"
     },
     "dependencies": {
         "stringify": "3.1.0"
