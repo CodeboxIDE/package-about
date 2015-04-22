@@ -14,22 +14,17 @@ var helpUrl = "http://help.codebox.io/";
 var feedbackUrl = "https://github.com/CodeboxIDE/codebox/issues";
 
 // Cached methods
-var about = _.memoize(function() {
-    return rpc.execute("codebox/about")
-    .then(function(pkg) {
-        var currentVersion = pkg.version;
-        var lastVersion = storage.get("codeboxVersion");
+var about = function() {
+    var currentVersion = codebox.workspace.get('version');
+    var lastVersion = storage.get("codeboxVersion");
 
-        if (lastVersion == null) {
-            commands.run("application.welcome");
-        } else if (currentVersion != lastVersion) {
-            commands.run("application.changes");
-        }
-        storage.set("codeboxVersion", currentVersion);
-
-        return pkg;
-    });
-});
+    if (lastVersion == null) {
+        commands.run("application.welcome");
+    } else if (currentVersion != lastVersion) {
+        commands.run("application.changes");
+    }
+    storage.set("codeboxVersion", currentVersion);
+};
 var releasesNotes = _.memoize(rpc.execute.bind(rpc, "codebox/changes"));
 
 // About dialog
@@ -37,10 +32,7 @@ commands.register({
     id: "application.about",
     title: "Application: About",
     run: function() {
-        return about()
-        .then(function(pkg) {
-            return dialogs.alert(_.template(aboutMessage)(pkg), { isHtml: true });
-        });
+        return dialogs.alert(_.template(aboutMessage)(codebox.workspace.toJSON()), { isHtml: true });
     }
 });
 
